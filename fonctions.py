@@ -11,7 +11,7 @@ data = pd.read_excel(r"kholloscope_full.xls")
 def bad_to_good(raw: str) -> dict:
     """
     :param raw: de la forme "nom (jour 00h, SALLE5)"
-    :return: dictionnaire avec les clés "nom", "day", "hour", "room"
+    :return: dictionnaire avec les clés "nom", "day", "start_hour", "room"
     """
     keys = ("name", "day", "start_hour", "room")
     pattern = r"(.+) \((\w{3}) (\d{2}h), (.+)\)"
@@ -74,10 +74,11 @@ def get_datetime_from_dico(dico):
     numero, mois = d[dico["week_num"] - 1].split("/")
     jour = dico["day"]
     year = "2021"
+    heure = dico["start_hour"][0:2]
     if int(mois) < 8:
         year = "2022"
-    datetime_str = numero + "/" + mois + "/" + year
-    datetime_obj = datetime.strptime(datetime_str, '%d/%m/%Y')
+    datetime_str = numero + "/" + mois + "/" + year + "/" + heure
+    datetime_obj = datetime.strptime(datetime_str, '%d/%m/%Y/%H')
     newdate = datetime_obj + timedelta(days=dicj[jour])
     tz = pytz.timezone("Europe/Paris")
     newdate = tz.localize(newdate)
@@ -98,14 +99,22 @@ def all_colles_dict(group) -> dict:
     return dict(zip(keys, info))
 
 
-def find_next_two_colles(group):
-    now = datetime.now(pytz.timezone("Europe/Paris"))
-    dico = all_colles_dict(group)
+def find_next_two_colles(dico):
+    now = pendulum.now()
+    dico = dico
     cles = dico.keys()
-    result = []
+    deux_colles = []
     for date in cles:
-        if date > now:
-            result.append(dico[date])
-        if len(result) >= 2:
+        if date > now.add(hours=- 1):
+            colle = dico[date]
+            colle["this_week"] = is_next_week(colle)
+            deux_colles.append(colle)
+        if len(deux_colles) >= 2:
             break
-    return result
+    return deux_colles
+
+
+def is_next_week(colle):
+    now = pendulum.now()
+    date_time_colle = get_datetime_from_dico(colle)
+    return now.weekday() > date_time_colle.weekday() or now.add(days=7) <= date_time_colle
