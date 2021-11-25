@@ -96,15 +96,24 @@ def all_colles_dict(group) -> dict:
         for elem in a:
             keys.append(get_datetime_from_dico(elem))
             info.append(elem)
-    return dict(zip(keys, info))
+
+    dict_to_return = dict(zip(keys, info))
+    return sort_dict_by_key(dict_to_return)
 
 
-def find_next_two_colles(dico):
+def sort_dict_by_key(d):
+    n = dict()
+    for key in sorted(d.keys()):
+        n[key] = d[key]
+    return n
+
+
+def find_next_two_colles(dico) -> list[dict, dict]:
     now = pendulum.now()
-    dico = dico
     cles = dico.keys()
     deux_colles = []
     for date in cles:
+        # print(date, dico[date]["matiere"])
         if date > now.add(hours=- 1):
             colle = dico[date]
             colle["this_week"] = is_next_week(colle)
@@ -114,7 +123,14 @@ def find_next_two_colles(dico):
     return deux_colles
 
 
+def next_monday():
+    day = pendulum.now()
+    day = day.replace(hour=8)
+    while day.weekday() != 0:
+        day = day.add(days=1)
+    return day
+
+
 def is_next_week(colle):
-    now = pendulum.now()
     date_time_colle = get_datetime_from_dico(colle)
-    return now.weekday() > date_time_colle.weekday() or now.add(days=7) <= date_time_colle
+    return date_time_colle >= next_monday()
