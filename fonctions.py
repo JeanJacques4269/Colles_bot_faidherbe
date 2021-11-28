@@ -46,7 +46,7 @@ def request_info(group, week_num, data) -> list[dict, dict]:
 def _matiere(x):
     if x < 13:
         return "Maths"
-    elif x <= 21:
+    elif x <= 19:
         return "Physique"
     else:
         return "Anglais"
@@ -108,21 +108,6 @@ def sort_dict_by_key(d):
     return n
 
 
-def find_next_two_colles(dico) -> list[dict, dict]:
-    now = pendulum.now()
-    cles = dico.keys()
-    deux_colles = []
-    for date in cles:
-        # print(date, dico[date]["matiere"])
-        if date > now.add(hours=- 1):
-            colle = dico[date]
-            colle["this_week"] = is_next_week(colle)
-            deux_colles.append(colle)
-        if len(deux_colles) >= 2:
-            break
-    return deux_colles
-
-
 def next_monday():
     day = pendulum.now()
     day = day.replace(hour=8)
@@ -134,3 +119,23 @@ def next_monday():
 def is_next_week(colle):
     date_time_colle = get_datetime_from_dico(colle)
     return date_time_colle >= next_monday()
+
+
+def find_next_two_colles(dico) -> list[dict, dict]:
+    now = pendulum.now()
+    cles = dico.keys()
+    deux_colles = []
+    for date in cles:
+        # print(date, dico[date]["matiere"])
+        if date > now.add(hours=- 1):
+            colle = dico[date]
+            colle["next_week"] = is_next_week(colle)
+            deux_colles.append(colle)
+        if len(deux_colles) >= 2:
+            break
+    return deux_colles
+
+
+def find_next_colles(group):
+    dico = all_colles_dict(group)
+    return find_next_two_colles(dico)

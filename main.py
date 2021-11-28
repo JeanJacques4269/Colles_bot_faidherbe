@@ -31,10 +31,10 @@ async def c(ctx, *arg):
 
     colles = find_next_two_colles(big_dico[group])
     for colle in colles:
-        matiere, jour, heure, prof, salle, this_week = colle["matiere"], colle["day"], colle["start_hour"], colle[
-            "name"], colle["room"], colle["this_week"]
+        matiere, jour, heure, prof, salle, next_week = colle["matiere"], colle["day"], colle["start_hour"], colle[
+            "name"], colle["room"], colle["next_week"]
         embed.add_field(
-            name=matiere + (" | semaine prochaine" if this_week else ""),
+            name=matiere + (" | semaine prochaine" if next_week else ""),
             value=f"{jour[0].upper() + jour[1:]} {heure} en {salle} avec {prof}",
             inline=False)
     await ctx.send(embed=embed)
