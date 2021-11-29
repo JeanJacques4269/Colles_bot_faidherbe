@@ -109,7 +109,7 @@ def sort_dict_by_key(d):
 
 
 def next_monday():
-    day = pendulum.now()
+    day = pendulum.now().add(days=1)
     day = day.replace(hour=8)
     while day.weekday() != 0:
         day = day.add(days=1)
