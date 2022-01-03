@@ -16,6 +16,11 @@ async def on_ready():
 
 
 @client.command()
+async def ds(ctx):
+    await ctx.send("https://cdn.discordapp.com/attachments/800044073158574093/927653423229329448/unknown.png")
+
+
+@client.command()
 async def c(ctx, *arg):
     """Affiche les deux prochaines colles du groupe choisi, vous pourrez ainsi réviser votre cours dans les
     meilleures conditions :)"""
