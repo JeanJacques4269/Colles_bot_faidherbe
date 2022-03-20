@@ -15,15 +15,16 @@ client = commands.Bot(command_prefix='!')
 concours_time = datetime(2022, month=4, day=19, hour=8, tzinfo=pytz.timezone("Europe/Paris"))
 
 
-# @client.event
-# async def on_ready():
-#     print('Connected as {}'.format(client.user))
-#
-#
-# @client.command()
-# async def ds(ctx):
-#     await ctx.send("https://cdn.discordapp.com/attachments/800044073158574093/927653423229329448/unknown.png")
-#
+@client.event
+async def on_ready():
+    print('Connected as {}'.format(client.user))
+
+
+@client.command()
+async def ds(ctx):
+    await ctx.send("https://cdn.discordapp.com/attachments/800044073158574093/927653423229329448/unknown.png")
+
+
 #
 # @client.command()
 # async def c(ctx, *arg):
@@ -64,7 +65,7 @@ async def reminder():
 
 
 def time_until_theday(d_day):
-    td = d_day - datetime.now()
+    td = d_day - datetime.now(tz=pytz.timezone("Europe/Paris"))
     return td.days, td.seconds // 3600, ((td.seconds - td.seconds // 3600 * 3600) // 60)
 
 
