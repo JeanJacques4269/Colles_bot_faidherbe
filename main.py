@@ -56,7 +56,7 @@ async def reminder():
 
         for guild in client.guilds:
             for channel in guild.text_channels:
-                if channel.name == "test":
+                if channel.name == "khôlles":
                     chan = channel
                     embed = discord.Embed(title=str_time_remaining(concours_time))
                     await chan.send(embed=embed)
