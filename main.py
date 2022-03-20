@@ -12,7 +12,7 @@ client = commands.Bot(command_prefix='!')
 # big_list = [all_colles_dict(i) for i in range(1, 14)]
 # big_dico = dict(zip(list(range(1, 14)), big_list))
 
-concours_time = datetime(2022, month=4, day=19, hour=8)
+concours_time = datetime(2022, month=4, day=19, hour=8, tzinfo=pytz.timezone("Europe/Paris"))
 
 
 # @client.event
