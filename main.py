@@ -50,7 +50,6 @@ async def ds(ctx):
 #             inline=False)
 #     await ctx.send(embed=embed)
 
-
 async def reminder():
     await client.wait_until_ready()
     while not client.is_closed():
@@ -71,8 +70,8 @@ def time_until_theday(d_day):
 
 def str_time_remaining(d_day):
     j, h, m = time_until_theday(d_day)
-    return f"il reste {j} {'jours' if j > 1 else 'jour'}, {h} {'heures' if h > 1 else 'heure'} et {m} " \
-           f"minutes avant le début des concours."
+    return f"il reste {j} {'jours' if j > 1 else 'jour'} {h} {'heures' if h > 1 else 'heure'} et {m} " \
+           f"{'minutes' if m > 1 else 'minute'} avant le début des concours."
 
 
 client.loop.create_task(reminder())
