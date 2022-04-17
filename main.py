@@ -1,6 +1,5 @@
 import asyncio
 import random
-
 import discord
 from decouple import config
 from discord.ext import commands, tasks
@@ -53,25 +52,15 @@ async def ds(ctx):
 async def reminder():
     await client.wait_until_ready()
     while not client.is_closed():
-
-        for guild in client.guilds:
-            for channel in guild.text_channels:
-                if channel.name == "khôlles":
-                    chan = channel
-                    embed = discord.Embed(title=str_time_remaining(concours_time))
-                    await chan.send(embed=embed)
-                    await asyncio.sleep(random.randint(28800, 172800))
-
-
-def time_until_theday(d_day):
-    td = d_day - datetime.now(tz=pytz.timezone("Europe/Paris"))
-    return td.days, td.seconds // 3600, ((td.seconds - td.seconds // 3600 * 3600) // 60)
-
-
-def str_time_remaining(d_day):
-    j, h, m = time_until_theday(d_day)
-    return f"il reste {j} {'jours' if j > 1 else 'jour'} {h} {'heures' if h > 1 else 'heure'} et {m} " \
-           f"{'minutes' if m > 1 else 'minute'} avant le début des concours."
+        if is_time_between(time(20, 0), time(20, 1)):
+            for guild in client.guilds:
+                for channel in guild.text_channels:
+                    if channel.name == "khôlles":
+                        chan = channel
+                        await chan.send(
+                            "https://media.discordapp.net/attachments/709480777494298669/965299698925723708/unknown.png")
+                        exit(0)
+        await asyncio.sleep(10)
 
 
 client.loop.create_task(reminder())

@@ -1,6 +1,5 @@
 import re
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta, time
 import pandas as pd
 import pendulum
 import pytz
@@ -139,3 +138,22 @@ def find_next_two_colles(dico) -> list[dict, dict]:
 def find_next_colles(group):
     dico = all_colles_dict(group)
     return find_next_two_colles(dico)
+
+
+def time_until_theday(d_day):
+    td = d_day - datetime.now(tz=pytz.timezone("Europe/Paris"))
+    return td.days, td.seconds // 3600, ((td.seconds - td.seconds // 3600 * 3600) // 60)
+
+
+def str_time_remaining(d_day):
+    j, h, m = time_until_theday(d_day)
+    return f"il reste {j} {'jours' if j > 1 else 'jour'} {h} {'heures' if h > 1 else 'heure'} et {m} " \
+           f"{'minutes' if m > 1 else 'minute'} avant le début des concours."
+
+
+def is_time_between(begin_time, end_time, check_time=None):
+    check_time = datetime.now().time()
+    if begin_time < end_time:
+        return begin_time <= check_time <= end_time
+    else:  # crosses midnight
+        return check_time >= begin_time or check_time <= end_time
